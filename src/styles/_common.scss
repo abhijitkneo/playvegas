@@ -1,0 +1,38 @@
+.flex-vh-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-with-icon {
+	@extend .flex-vh-center;
+	gap: 8px;
+}
+
+p {
+	color: #b4b4b4;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.no-scrollbar {
+	&::-webkit-scrollbar-track {
+		-webkit-box-shadow: none;
+		background-color: transparent;
+		display: none;
+	}
+
+	&::-webkit-scrollbar {
+		width: 6px;
+		background-color: transparent;
+		display: none;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: transparent;
+		border-radius: 10px;
+		display: none;
+	}
+}
