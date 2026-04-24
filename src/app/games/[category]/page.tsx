@@ -2,9 +2,7 @@ import BackButton from '@/components/common/BackButton'
 import GameCard from '@/components/common/GameCard'
 import SectionHeading from '@/components/common/SectionHeading'
 import { getAllGamesByCategory } from '@/services/gameService'
-import React from 'react'
-import { Button, Col, Container, Row } from 'react-bootstrap'
-import { IoChevronBackOutline } from 'react-icons/io5'
+import { Col, Container, Row } from 'react-bootstrap'
 
 export default async function CategoryPage({params}: {params: Promise<{category: string}>}) {
 

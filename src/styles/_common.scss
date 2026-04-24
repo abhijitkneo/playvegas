@@ -36,3 +36,10 @@ p {
 		display: none;
 	}
 }
+
+.form-select {
+	@extend .cursor-pointer;
+	&:focus {
+		box-shadow: none;
+	}
+}

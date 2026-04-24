@@ -16,7 +16,7 @@ export default async function Home() {
 			<Top10GameSection category="battle royale" />
 
 			<Row>
-				<Col md={12}>
+				<Col md={12} className="text-center">
 					<Button variant="primary" href="/games">View All Games</Button>
 				</Col>
 			</Row>

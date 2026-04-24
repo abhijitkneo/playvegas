@@ -4,20 +4,26 @@ $body-bg: #1f1f1f;
 $body-color: #fff;
 $light: #33353D;
 
-$input-bg: rgba(0, 0, 0, 0.8);
-$input-border-color: rgba(242, 193, 46, 0.5);
-$input-focus-border-color: rgba(242, 193, 46, 0.5);
-
 $enable-negative-margins: true;
+
 $card-border-radius: 8px;
 $card-border-width: unset;
+
 $btn-padding-y: 10px;
 $btn-padding-y-sm: 6px;
 $btn-padding-x: 12px;
 $btn-font-weight: 500;
+
+$input-bg: rgba(0, 0, 0, 0.8);
+$input-border-color: rgba(242, 193, 46, 0.5);
+$input-focus-border-color: rgba(242, 193, 46, 0.5);
 $input-padding-y: 10px;
 $input-padding-x: 16px;
 $input-focus-box-shadow: unset;
+$input-focus-box-shadow: null;
+
+$form-label-margin-bottom: 2px;
+$form-select-indicator-color: #ccc;
 
 $modal-backdrop-opacity: .8;
 
