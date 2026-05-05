@@ -13,18 +13,19 @@ const GameList = () => {
 	const [filteredGames, setFilteredGames]= useState<any[]>([]);
 	const [genre, setGenre] = useState('');
 	const [platform, setPlatform] = useState('');
+	const [loading, setLoading] = useState(true);
+	const [search, setSearch] = useState('');
+	const [debouncedSearch, setDebouncedSearch] = useState('');
+	const visibleGameCount = 18;
+	const [visibleCount, setVisibleCount] = useState(visibleGameCount)
+	const [loadingMore, setLoadingMore] = useState(false);
 
 	const genres = [...new Set(games.map(g => g.genre))];
 	const platforms = [...new Set(games.map(p => p.platform))];
-	const hasActiveFilters = genre || platform;
+	const hasActiveFilters = genre || platform || search;
 
-	const [loading, setLoading] = useState(true);
-	const visibleGameCount = 18;
-	const [visibleCount, setVisibleCount] = useState(visibleGameCount)
 	const loaderRef = useRef<HTMLDivElement | null>(null)
-	const [loadingMore, setLoadingMore] = useState(false);
-
-
+	
 	//console.log(games, '<< All games');
 	//console.log(platforms, '<< All Platforms'	);
 	
@@ -35,18 +36,36 @@ const GameList = () => {
 		}).finally(() => setLoading(false));
 	}, [])
 
+	//debounce effect
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setDebouncedSearch(search.toLowerCase())
+		}, 300);
+
+		return () => clearTimeout(timer)
+	}, [search])
+
 	useEffect(() => {
 		setLoading(true);
 
 		const timeout = setTimeout(() => {
 			let updated = [...games];
 
+			//debounce effect
+			if(debouncedSearch) {
+				updated = updated.filter((game) => 
+					game.title.toLowerCase().includes(debouncedSearch)
+				);
+			}
+
+			//genre filter
 			if (genre) {
 				updated = updated.filter((game) =>
 					game.genre.toLowerCase().includes(genre)
 				);
 			}
 
+			//platform filter
 			if (platform) {
 				updated = updated.filter((game) =>
 					game.platform.toLowerCase().includes(platform)
@@ -59,7 +78,7 @@ const GameList = () => {
 
 		return () => clearTimeout(timeout);
 
-	}, [genre, platform, games]);
+	}, [debouncedSearch, genre, platform, games]);
 
 	useEffect(() => {
 		const observer = new IntersectionObserver((entries) => {
@@ -83,13 +102,24 @@ const GameList = () => {
 
 	useEffect(() => {
 		setVisibleCount(visibleGameCount);
-	}, [genre, platform])
+	}, [genre, platform, debouncedSearch])
 
 	return (
 		<>
 			<SectionHeading title='All Games' />
 			<div className="game-filters bg-light p-3 rounded mb-4">
 				<Row className='gx-3'>
+					<Col md={5}>
+						<Form.Group>
+							<Form.Label>Search</Form.Label>
+							<Form.Control
+								type='search'
+								placeholder='Search Game by Name'
+								value={search}
+								onChange={(e) => setSearch(e.target.value)}
+							/>
+						</Form.Group>
+					</Col>
 					<Col md={3}>
 						<Form.Group>
 							<Form.Label>Genre</Form.Label>
@@ -125,14 +155,22 @@ const GameList = () => {
 					{
 						hasActiveFilters && (
 							<>
-								<Col md={3} className='align-self-end'>
-									<Button variant='primary' 
+								<Col md={1} className='align-self-end'>
+									<Button 
+										variant='primary' 
+										size='sm'
+										className='w-100 px-0 py-2' 
 										onClick={ () => {
 												setGenre('');
 												setPlatform('');
+												setSearch('');
 											}
 										}
-									>Clear</Button>
+									>
+										<span className="d-block py-1">
+											Clear Filters
+										</span>
+									</Button>
 								</Col>
 								<Col sm={12}>
 									<p className="m-0 mt-2">
