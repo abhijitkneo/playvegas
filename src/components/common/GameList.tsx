@@ -1,11 +1,12 @@
 'use client';
 
 import { getGames } from '@/services/gameService';
-import { useEffect, useState } from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { useEffect, useRef, useState } from 'react'
+import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import GameCard from './GameCard';
 import PageLoader from './PageLoader';
 import NoGamesFound from './NoGamesFound';
+import SectionHeading from './SectionHeading';
 
 const GameList = () => {
 	const [games, setGames] = useState<any[]>([]);
@@ -18,6 +19,10 @@ const GameList = () => {
 	const hasActiveFilters = genre || platform;
 
 	const [loading, setLoading] = useState(true);
+	const visibleGameCount = 18;
+	const [visibleCount, setVisibleCount] = useState(visibleGameCount)
+	const loaderRef = useRef<HTMLDivElement | null>(null)
+	const [loadingMore, setLoadingMore] = useState(false);
 
 
 	//console.log(games, '<< All games');
@@ -56,8 +61,33 @@ const GameList = () => {
 
 	}, [genre, platform, games]);
 
+	useEffect(() => {
+		const observer = new IntersectionObserver((entries) => {
+			if(entries[0].isIntersecting && visibleCount < filteredGames.length && !loadingMore) {
+				setLoadingMore(true);
+
+				setTimeout(() => {
+					setVisibleCount((prev) => prev + visibleGameCount)
+					setLoadingMore(false);
+				}, 600)
+			}
+		},
+		{threshold: 0.5}
+		);
+		if(loaderRef.current) {
+			observer.observe(loaderRef.current)
+		}
+		return () => observer.disconnect();
+
+	}, [visibleCount, filteredGames])
+
+	useEffect(() => {
+		setVisibleCount(visibleGameCount);
+	}, [genre, platform])
+
 	return (
 		<>
+			<SectionHeading title='All Games' />
 			<div className="game-filters bg-light p-3 rounded mb-4">
 				<Row className='gx-3'>
 					<Col md={3}>
@@ -121,10 +151,11 @@ const GameList = () => {
 				loading ? (
 					<PageLoader />
 				) : (
+					<>
 					<Row className='g-3'>
 						{
 							filteredGames.length > 0 ? (
-								filteredGames.map((game) => (
+								filteredGames.slice(0, visibleCount).map((game) => (
 									<Col md={2} key={game.id}>
 										<GameCard game={game} />
 									</Col>
@@ -134,6 +165,23 @@ const GameList = () => {
 							)
 						}
 					</Row>
+					<Row className='mt-4'>
+						<Col sm={12} ref={loaderRef} className='text-center'>
+							{
+								visibleCount < filteredGames.length && (
+									<>
+										<Row className='mb-4'>
+											<PageLoader />
+										</Row>
+										<div className="d-inline-flex align-items-center justify-content-center gap-2 border border-primary text-center rounded py-2 px-3">
+											<Spinner animation='border' size='sm' variant='primary' /> Loading more games
+										</div>
+									</>
+								)
+							}
+						</Col>
+					</Row>
+					</>
 				)
 			}
 		</>

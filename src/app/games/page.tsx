@@ -6,7 +6,7 @@ import { Container } from 'react-bootstrap'
 const page = () => {
     return (
         <Container fluid> 
-            <SectionHeading title='All Games' />
+            {/* <SectionHeading title='All Games' /> */}
             <GameList />
         </Container>
     )

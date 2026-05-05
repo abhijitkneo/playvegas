@@ -13,8 +13,8 @@ const Header = () => {
 						</Link>
 					</Col>
 					<Col md={9} className='text-end align-self-center'>
-						<Button variant='primary' size='sm' className='me-2'>Login</Button>
-						<Button variant='outline-primary' size='sm'>Register</Button>
+						<Button variant='primary' size='sm' className='me-2 d-none'>Login</Button>
+						<Button variant='outline-primary' size='sm' className='d-none'>Register</Button>
 					</Col>
 				</Row>
 			</Container>
