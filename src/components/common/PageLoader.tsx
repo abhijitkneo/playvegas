@@ -9,7 +9,7 @@ const PageLoader = () => {
 				Array.from({length: 6}).map((_, i) => (
 					<Col md={2} key={i}>
 						<Placeholder as={Card.Text} animation="glow">
-							<Placeholder xs={12}  className="rounded" style={{height: '150px'}} />
+							<Placeholder xs={12}  className="rounded" style={{height: '150px', background: '#7c7e8c'}} />
 						</Placeholder>
 					</Col>
 				))
